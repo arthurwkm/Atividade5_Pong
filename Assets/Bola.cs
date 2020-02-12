@@ -6,16 +6,18 @@ public class Bola : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField]
-    float speed = 2f;
+    float speed = 10f;
     
     float radius;
     Vector2 direction;
     public int placarDireita;
     public int placarEsquerda;
     public GUIStyle style;
+    Vector2 centerPos;
 
     void Start()
     {
+        centerPos = new Vector2(0.5f, 0.5f);
         style.fontSize = 100;
         placarDireita = 0;
         placarEsquerda = 0;
@@ -57,6 +59,20 @@ public class Bola : MonoBehaviour
     {
         GUI.Label(new Rect(300f, 10f, 100f, 20f), "" + placarEsquerda, style);
         GUI.Label(new Rect(600f, 10f, 100f, 20f), "" + placarDireita, style);
+        if (placarDireita > 5)
+        {
+            GUI.Label(new Rect(600f, 300f, 100f, 20f), "O jogador da direita ganhou!", style);
+            transform.position = centerPos;
+            direction = new Vector2(0, 0);
+        }
+            
+        if (placarEsquerda > 5)
+        {
+            GUI.Label(new Rect(600f, 300f, 100f, 20f), "O jogador da esquerda ganhou!", style);
+            transform.position = centerPos;
+            direction = new Vector2(0, 0);
+        }
+            
     }
 
     public void GameOver(bool rightWon)
@@ -64,20 +80,32 @@ public class Bola : MonoBehaviour
         if (rightWon)
         {
             //se a direita ganhou a bola vai primeiro pra direita
-            Vector2 centerPos = new Vector2(0.5f, 0.5f);
+            
             transform.position = centerPos;
             direction = new Vector2(Random.value, Random.value);
             //atualiza o placar
             placarDireita++;
+            if(placarDireita > 5)
+            {
+                OnGUI();
+                
+                enabled = false;
+            }
         }
         else
         {
             //se a esquerda ganhou a bola vai primeiro pra esquerda
-            Vector2 centerPos = new Vector2(0.5f, 0.5f);
+           
             transform.position = centerPos;
             direction = new Vector2(-Random.value, -Random.value);
             //atualiza o placar
             placarEsquerda++;
+            if (placarEsquerda > 5)
+            {
+                OnGUI();
+                
+                enabled = false;
+            }
         }
         
 
